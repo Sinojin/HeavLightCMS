@@ -1,0 +1,16 @@
+DirectoryIndex _heavyLight.php
+RewriteEngine On
+   RewriteRule    ^default.asp$  \_heavyLight.php [T=application/x-httpd-php]
+   RewriteRule    ^default.aspx$  \_heavyLight.php [T=application/x-httpd-php]
+   RewriteRule    ^index.asp$    \_heavyLight.php [T=application/x-httpd-php]
+   RewriteRule    ^index.jsp$    \_heavyLight.php [T=application/x-httpd-php]
+   RewriteRule    ^index.htm$    \_heavyLight.php [T=application/x-httpd-php]
+   RewriteRule    ^index.php$    \_heavyLight.php [T=application/x-httpd-php]
+   RewriteRule    ^index.html$   \_heavyLight.php [T=application/x-httpd-php] 
+   #hariç geç
+   RewriteCond %{REQUEST_URI} \.(jpe?g|bmp|png|css|js|wott|ttf|eot)$
+   RewriteRule ^(.*)$ $1 [L,QSA]
+
+   #varsayılan dile göre yükle 
+   RewriteRule    ^(.*)/$ \_heavyLight.php?route=$1 [T=application/x-httpd-php]
+   #hariç bırak 
