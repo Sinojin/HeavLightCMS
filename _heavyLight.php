@@ -7,5 +7,5 @@
 
 */
 	require_once("_core/class/system.php");
-	//app::config(Array('database'=>'test.db'));
-	app::run();
+	app::$config['database'] = 'test.db';
+	app::run(); 

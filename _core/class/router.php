@@ -8,6 +8,7 @@ a code by Seyhan YILDIZ a.k.a. sTaRs
 
 class route {
 	public static $view;
+	public static $static = 0;
 	public static $function;
 	public static $get;
 	public static $id;
@@ -15,14 +16,31 @@ class route {
 	public static function sql($route){
 		try {
 
-			$db = new PDO('sqlite:' . config::$database);	
+			$db = new PDO('sqlite:' . app::$config['db_host']);	
 			$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$db = $db->query("select count(*) as count, * from router where seo = '{$route}';");
 			$result =  $db->fetch(PDO::FETCH_ASSOC);
 
-			//route yoksa ana sayfayı döndür
+			//route yoksa ve static arama kapalıysa ana sayfayı döndür
 			if(!$result['count']){
+				if(app::$config['x404'] == 0){
+
+					return 'default';
+
+				}
+				if(!is_int(app::$config['x404'])){
+
+					return app::$config['x404'];
+
+				}
+				if(app::$config['x404'] == 1 &&	file_exists('_core/views/static/' . $route . '.html')){
+
+					self::$static = 1;
+					return 'static/' . $route;
+
+				}
 				return 'default';
+
 			}
 
 			//rota belirle
@@ -44,8 +62,10 @@ class route {
 
 	public static function get(){
 		if(!$_GET){
+
 			self::$view = 'default';
 			return true;
+
 		}
 		else {
 			/*
@@ -53,6 +73,7 @@ class route {
 			/	sql injection kontrol edicek
 			/	
 			----------------------------*/
+
 
 			self::$get = explode('/',$_GET['route']);
 
