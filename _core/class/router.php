@@ -14,14 +14,11 @@ class route {
 	public static $id;
 
 	public static function sql($route){
-		try {
-
-			$db = new PDO('sqlite:' . app::$config['db_host']);	
-			$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$db = $db->query("select count(*) as count, * from router where seo = '{$route}';");
-			$result =  $db->fetch(PDO::FETCH_ASSOC);
+		try { 
 
 			//route yoksa ve static arama kapalıysa ana sayfayı döndür
+			$result = app::$db->query("select count(*) as count, * from router where seo = '{$route}';")->fetch(PDO::FETCH_ASSOC); 
+ 
 			if(!$result['count']){
 				if(app::$config['x404'] == 0){
 
@@ -51,7 +48,7 @@ class route {
 			return $result['view'];
 
 			//bağlantıyı kes
-			$db = null;
+			//app::$db = null;
 
 		} catch (Exception $e) {
 			

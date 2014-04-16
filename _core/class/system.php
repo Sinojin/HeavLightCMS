@@ -45,13 +45,15 @@ class design {
 
 class app extends design{
 	public static $auto_configure = 1;
+	public static $db;
 	public static $config = Array('cache' => false, 
-								  'db_type' =>'sqlite', 
-								  'db_host' => 'database.db', 
-								  'db_user' => '',  
-								  'db_pass' => '',
-								  'x404'=>1 // 0 = default(controller) 1 = static check (and if fail turn to default) string is rooting "string" controller
-								  ); 
+				  'db_type' =>'sqlite', 
+				  'db_host' => 'localhost', 
+				  'db_name' => 'database.db', 
+				  'db_user' => '',  
+				  'db_pass' => '',
+				  'x404'=>1 // 0 = default(controller) 1 = static check (and if fail turn to default) string is rooting "string" controller
+				  ); 
 
 	public static function seo_filter($link){
 		//seo link hazırlamak için        //tr karakter encode
@@ -63,6 +65,28 @@ class app extends design{
 
         return $data; 
 	}
+	public static function connect(){
+			if(!self::$db){
+				switch (self::$config['db_type']) {
+					case 'mysql':
+						# mysql connecting..
+						$dns = 'mysql:host=' . self::$config['db_host'] . ';dbname=' . self::$config['db_name'];
+						break;
+					case 'mssql':
+						# mssql connecting..
+						$dns = 'sqlsrv:server=' . self::$config['db_host'] . ';database=' . self::$config['db_name'];
+						break;
+					
+					default:
+						# sqlite connecting..
+						$dns = 'sqlite:' . self::$config['db_name'];
+						break;
+				}
+				self::$db = new PDO($dns, self::$config['db_user'], self::$config['db_pass']);
+				self::$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			}
+			return self::$db;
+	}
 
 	public static function run(){
 		//charset
@@ -71,6 +95,8 @@ class app extends design{
 		//router bilgisi al
 		require_once('router.php');
 
+		self::connect();
+  
 		route::get();
 
 
@@ -93,5 +119,6 @@ class app extends design{
 		//görüntüle
 		parent::display();
 		 
-	}
+	}  
+	private function __clone(){ }
 }
