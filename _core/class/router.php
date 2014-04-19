@@ -22,7 +22,7 @@ class route {
 			if(!$result['count']){
 				if(app::$config['x404'] == 0){
 
-					return 'default';
+					return 'index';
 
 				}
 				if(!is_int(app::$config['x404'])){
@@ -36,7 +36,7 @@ class route {
 					return 'static/' . $route;
 
 				}
-				return 'default';
+				return 'index';
 
 			}
 
@@ -60,7 +60,7 @@ class route {
 	public static function get(){
 		if(!$_GET){
 
-			self::$view = 'default';
+			self::$view = 'index';
 			return true;
 
 		}

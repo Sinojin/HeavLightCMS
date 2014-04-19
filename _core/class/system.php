@@ -46,6 +46,7 @@ class design {
 class app extends design{
 	public static $auto_configure = 1;
 	public static $db;
+	public static $controller;
 	public static $config = Array('cache' => false, 
 				  'db_type' =>'sqlite', 
 				  'db_host' => 'localhost', 
@@ -87,6 +88,12 @@ class app extends design{
 			}
 			return self::$db;
 	}
+	private function load_controller(){
+		//load controller file
+		include('_core/controllers/' . route::$view . '.php');  
+ 	  	self::$controller = new route::$view();
+
+	}
 
 	public static function run(){
 		//charset
@@ -114,7 +121,9 @@ class app extends design{
 			return;
 		} 
 		//kontroller ı devreye al hazırla sonra görüntüle
- 
+		
+ 	   //file_exists('_core/controllers/' . route::$view . '.php') ? $this->load_controller() : die('File doesn\'t exits..');
+
 
 		//görüntüle
 		parent::display();
