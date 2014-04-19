@@ -19,7 +19,6 @@ class form_class {
     private $submit_button = 'kaydet';
     private $form_elements;
     private $loader;
-    private $ekleme;
     #input ekleme
 
     function add_input($id, $label = '', $value = '', $hold = '', $detail = '') {
